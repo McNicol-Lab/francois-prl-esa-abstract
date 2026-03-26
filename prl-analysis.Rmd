@@ -1,0 +1,41 @@
+---
+title: "PRL Gas Flux Analysis"
+author: "Gavin McNicol"
+date: "2026-03-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+libraries
+
+```{r}
+library(tidyverse)
+```
+
+get data
+
+```{r}
+data <- read_csv("francois-prl-fluxes.csv")
+```
+
+```{r}
+data
+```
+
+summarize fluxes and output as csv
+
+```{r}
+data %>% 
+  group_by(date_collected, treatment, gas) %>% 
+  summarize(mean_flux_umol = mean(flux_umol_m2_s1, na.rm = T),
+            mean_flux_nmol = mean(flux_nmol_m2_s1, na.rm = T)) %>% 
+  arrange(gas) %>% 
+  write_csv("francois-prl-fluxes-summary.csv")
+```
+
+linear regression and/or anova can go here....
+
+

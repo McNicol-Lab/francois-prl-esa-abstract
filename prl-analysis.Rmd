@@ -84,7 +84,7 @@ data %>%
 ```
 
 
-# Stat analysis
+# Stat analysis of Co2 flux
 
 ```{r}
 anova_co2 <- aov(flux_umol_m2_s1 ~ treatment, data = data)

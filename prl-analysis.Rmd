@@ -42,3 +42,66 @@ linear regression and/or anova can go here....
 lm(y ~ x)
 ```
 
+
+
+# Import PRL flux data for 10-02-25 and 10-13-25
+
+```{r}
+flux_data <- read.csv("/Users/Junior/Documents/PRL_experiment_2025/all_date-flux-summary-PRL.csv")%>% mutate(date_collected = as.Date(date_collected, format = "%m/%d/%Y"))
+```
+
+
+```{r}
+flux_data
+```
+
+# CO2 flux vs treatments
+
+```{r}
+flux_data %>% 
+  filter(gas=="co2") %>% 
+  group_by(treatment) %>% #date_collected) %>% 
+  summarise(mean_flux= mean(co2_flux, rm.na= TRUE))
+```
+
+
+# Test ANOVA for significance in co2 flux between treatments
+
+```{r}
+anova_co2 <- aov(co2_flux ~ treatment, data = flux_data)
+summary(anova_co2)
+```
+
+# Ch4 flux vs treatments
+
+```{r}
+flux_data %>% 
+  filter(gas=="ch4") %>% 
+  group_by(treatment) %>% # date_collected) %>% 
+  summarise(mean_flux= mean(ch4_flux, rm.na= TRUE))
+```
+
+# Test ANOVA for significance in ch4 flux between treatments
+
+```{r}
+anova_ch4 <- aov(ch4_flux ~ treatment, data = flux_data)
+summary(anova_ch4)
+```
+
+# n2o flux vs treatments
+
+```{r}
+flux_data %>% 
+  filter(gas=="n2o") %>% 
+  group_by(treatment) %>% #date_collected) %>% 
+  summarise(mean_flux= mean(n2o_flux, rm.na= TRUE))
+```
+
+# Test ANOVA for significance in no2 flux between treatments
+
+```{r}
+anova_n2o <- aov(n2o_flux ~ treatment, data = flux_data)
+summary(anova_n2o)
+```
+
+#########

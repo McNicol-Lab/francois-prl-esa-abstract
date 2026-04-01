@@ -9,10 +9,40 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-libraries
+# Load packages
 
 ```{r}
+
+install.packages("tidyverse")
 library(tidyverse)
+library(readxl)
+library(openintro)
+library(tidyr)
+library(dplyr)
+library(lubridate)
+library(tidymodels)
+library(data.table)
+library(patchwork) 
+library(hrbrthemes)
+library(multilevelmod)
+library(lme4)
+library(nlme)
+detach(package:lme4)
+library(parsnip)
+install.packages("ggpubr")
+library(ggpubr)
+library(ggsignif)
+install.packages("ggtern")
+library(ggtern)
+library(ggplot2)
+install.packages("gridExtra")
+library(gridExtra)
+install.packages("data2")
+library(data2)
+library(ggplot2)
+install.packages("multcompView")
+library(multcompView)
+library(phyloseq)
 ```
 
 get data
@@ -42,6 +72,30 @@ linear regression and/or anova can go here....
 lm(y ~ x)
 ```
 
+# JUnior continues on Gavin data
+
+## Average CO2 flux by treatment
+
+```{r}
+data %>% 
+  filter(gas=="co2") %>% 
+  group_by(treatment) %>% #date_collected) %>% 
+  summarise(mean_flux= mean(flux_umol_m2_s1, rm.na= TRUE))
+```
+
+
+# Stat analysis
+
+```{r}
+anova_co2 <- aov(flux_umol_m2_s1 ~ treatment, data = data)
+summary(anova_co2)
+```
+
+```{r}
+#co2_data<- 
+data %>% 
+  filter(gas=="co2")
+```
 
 
 # Import PRL flux data for 10-02-25 and 10-13-25

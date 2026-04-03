@@ -12,37 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 # Load packages
 
 ```{r}
-
-install.packages("tidyverse")
-library(tidyverse)
-library(readxl)
-library(openintro)
-library(tidyr)
-library(dplyr)
-library(lubridate)
-library(tidymodels)
-library(data.table)
-library(patchwork) 
-library(hrbrthemes)
-library(multilevelmod)
 library(lme4)
-library(nlme)
-detach(package:lme4)
-library(parsnip)
-install.packages("ggpubr")
-library(ggpubr)
-library(ggsignif)
-install.packages("ggtern")
-library(ggtern)
-library(ggplot2)
-install.packages("gridExtra")
-library(gridExtra)
-install.packages("data2")
-library(data2)
-library(ggplot2)
-install.packages("multcompView")
-library(multcompView)
-library(phyloseq)
+library(tidyverse)
+library(broom.mixed)
 ```
 
 get data
@@ -68,9 +40,39 @@ data %>%
 
 linear regression and/or anova can go here....
 
-```{r juniors-code}
-lm(y ~ x)
+```{r review-values}
+data %>% 
+  group_by(date_collected, treatment, gas) %>% 
+  summarize(mean_flux_umol = mean(flux_umol_m2_s1, na.rm = T),
+            sd_flux_umol = sd(flux_umol_m2_s1, na.rm = T),
+            mean_flux_nmol = mean(flux_nmol_m2_s1, na.rm = T)) %>% 
+  arrange(gas)
 ```
+
+```{r}
+d15_co2 <- data %>% filter(gas == "co2" & date_collected == "10/13/25")
+d15_ch4 <- data %>% filter(gas == "ch4" & date_collected == "10/13/25")
+d15_n2o <- data %>% filter(gas == "n2o" & date_collected == "10/13/25")
+
+
+d15_co2_m <- lmer(flux_umol_m2_s1 ~ treatment +
+       (1 | ecosystem), data = d15_co2)
+tidy(d15_co2_m)
+
+d15_ch4_m <- lmer(flux_nmol_m2_s1 ~ treatment +
+       (1 | ecosystem), data = d15_ch4)
+tidy(d15_ch4_m)
+
+d15_n2o_m <- lmer(flux_nmol_m2_s1 ~ treatment +
+       (1 | ecosystem), data = d15_n2o)
+tidy(d15_n2o_m)
+
+lm(flux_umol_m2_s1 ~ treatment, data = d15_co2) %>% tidy()
+lm(flux_nmol_m2_s1 ~ treatment, data = d15_ch4) %>% tidy()
+lm(flux_nmol_m2_s1 ~ treatment, data = d15_n2o) %>% tidy()
+
+```
+
 
 # JUnior continues on Gavin data
 
